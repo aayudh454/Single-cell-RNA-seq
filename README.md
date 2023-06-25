@@ -40,6 +40,17 @@ library(RCurl)
 library(scales)
 library(sctransform)
 ```
+### Load individual count matrices
+
+The Read10X() function reads in the output of the cellranger pipeline from 10X, returning a unique molecular identified (UMI) count matrix. The values in this matrix represent the number of molecules for each feature (i.e. gene; row) that are detected in each cell (column).
+
+```
+data1 <- Read10X("PDAC_tissue_1_filtered_feature_bc_matrix")
+data2 <- Read10X("PDAC_tissue_2_filtered_feature_bc_matrix")
+data3 <- Read10X("PDAC_tissue_3_filtered_feature_bc_matrix")
+data4 <- Read10X("PDAC_tissue_4_filtered_feature_bc_matrix")
+```
+
 
 -----
 <div id='id-section2'/>

@@ -5,9 +5,7 @@ REF: https://github.com/SomenMistri/intro_to_scRNA-seq/tree/main
 ## Table of contents    
 * [Page 1: 2023-25-06](#id-section1). Chapter 1: Data loading
 
-* [Page 2: 2023-30-06](#id-section2). Chapter 2: Processing sc-RNA data
-
-
+* [Page 2: 2023-30-06](#id-section2). Chapter 2: Visualize the common QC metrics
 
 ------
 <div id='id-section1'/>
@@ -137,4 +135,13 @@ H1_AAAGAACCATTAAAGG-1    Human-1      12734         4046 -0.027648932 -0.0867378
 -----
 <div id='id-section2'/>
 
-## Chapter 2: Processing sc-RNA data
+## Chapter 2: Visualize the common QC metrics
+
+Now plot the common QC metrics.
+
+```
+VlnPlot(data_merged, features = c("nFeature_RNA", "nCount_RNA"), ncol = 2)
+VlnPlot(data_merged, features = c("percent.MT","percent.RIBO"), ncol = 2)
+FeatureScatter(data_merged, feature1 = "percent.RIBO", feature2 = "percent.MT")
+FeatureScatter(data_merged, feature1 = "nCount_RNA", feature2 = "nFeature_RNA")
+```

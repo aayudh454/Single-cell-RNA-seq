@@ -91,6 +91,44 @@ head(data_norm1[[]])
 **nCount_RNA** is the **total number of molecules detected within a cell**. High nCount_RNA and/or nFeature_RNA indicates that the "cell" may in fact be a doublet (or multiplet). 
 
 
+### Merge individual seurat objects into one
+Merge all four seurat objects into one. The merge() function merges the raw count matrices of two or more Seurat objects creating a new Seurat object with a combined raw count matrix. Then, let's take a look at the metadata of the merged seurat object using the View() function.
+
+```
+#NOTE: By default, merge() function combines Seurat objects based on the raw count matrices, erasing any previous normalization
+data_merged <- merge(data_norm1, y = c(data_norm2, data_norm3, data_norm4), add.cell.ids = c("H1", "H2", "H3","H4"), project = "Human_1234")
+```
+
+To make sure that cells from all the human samples were merged properly, you can use the table() function:
+
+```
+table(data_merged$orig.ident)
+```
+
+### Calculate additional quality control metrics
+
+Calculate the **mitochondrial and ribosomal transcript percentage per cell**. Seurat has a function that enables us to do this. The PercentageFeatureSet() function can take a specific pattern and search through the dataset for that pattern. We can search for mitochondrial genes by looking for the pattern "MT-". Similarly, for the ribosomal genes, we can look for the pattern "^RP[SL]". Usually, cells with high proportions of mitochondrial genes are considered as poor-quality cells. On the other hand, percentage of ribosomal transcript per cell varies greatly from cell type to cell type. Therefore, caution should be taken to use percent.RIBO values to filter out low quality cells.
+
+```
+# The [[ operator can add columns to object metadata. This is a great place to stash QC stats
+#First add column with mitochondiral gene expression
+data_merged[["percent.MT"]] <- PercentageFeatureSet(data_merged, pattern = "^MT-")
+#Add column with ribosomal gene expression
+data_merged[["percent.RIBO"]] <- PercentageFeatureSet(data_merged, pattern = "^RP[SL]")
+#NOTE: this calculation is performed per cell. That is why this step can be performed on merged data
+
+head (data_merged)
+
+                      orig.ident nCount_RNA nFeature_RNA      S.Score   G2M.Score Phase percent.MT percent.RIBO
+H1_AAACGAAAGTGGAAAG-1    Human-1        501          269 -0.021500501  0.02518923   G2M  12.574850    0.3992016
+H1_AAACGAAGTAGGGTAC-1    Human-1      26196         4641 -0.043996838 -0.08059179    G1  45.132845    3.8402810
+H1_AAACGAAGTCATAGTC-1    Human-1      72725         7990 -0.055117973 -0.09913018    G1  14.349948   14.3045720
+H1_AAAGAACCATTAAAGG-1    Human-1      12734         4046 -0.027648932 -0.08673782    G1   3.683053    8.0021988
+```
+
+
+
+
 -----
 <div id='id-section2'/>
 

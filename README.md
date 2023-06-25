@@ -174,6 +174,8 @@ FeatureScatter(data_filtered, feature1 = "nCount_RNA", feature2 = "nFeature_RNA"
 
 ![alt text](https://github.com/aayudh454/Single-cell-RNA-seq/blob/main/after_filtering.png)
 
+REF: Jihe Liu, William J. Gammerdinger, Meeta Mistry, Mary E. Piper, & Radhika S. Khetani. (2022, January 6). hbctraining/Intro-to-shell-flipped: Shell and HPC Lessons from HCBC (first release). Zenodo. https://doi.org/10.5281/zenodo.5826091
+
 
 
 

@@ -90,7 +90,9 @@ head(data_norm1[[]])
 **nFeature_RNA** is the **number of genes detected in each cell**. Low nFeature_RNA for a cell indicates that it may be dead/dying or an empty droplet.
 **nCount_RNA** is the **total number of molecules detected within a cell**. High nCount_RNA and/or nFeature_RNA indicates that the "cell" may in fact be a doublet (or multiplet). 
 
-![alt text]([https://github.com/aayudh454/Lasky-Morris-Lab-Sorghum-project/blob/main/fdr%20correction.png](https://github.com/aayudh454/Single-cell-RNA-seq/blob/main/nCount_RNA_nFeature_RNA.png))
+![alt text]([(https://github.com/aayudh454/Single-cell-RNA-seq/blob/main/nCount_RNA_nFeature_RNA.png)]
+
+https://github.com/aayudh454/Single-cell-RNA-seq/blob/main/nCount_RNA_nFeature_RNA.png
 
 ### Merge individual seurat objects into one
 Merge all four seurat objects into one. The merge() function merges the raw count matrices of two or more Seurat objects creating a new Seurat object with a combined raw count matrix. Then, let's take a look at the metadata of the merged seurat object using the View() function.

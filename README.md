@@ -134,8 +134,11 @@ H1_AAAGAACCATTAAAGG-1    Human-1      12734         4046 -0.027648932 -0.0867378
 ## Chapter 2: Visualize the common QC metrics
 
 #### Before filering
-Now plot the common QC metrics.
-
+Now plot the common QC metrics to see-
+#### UMI counts per cell (nCount_RNA)
+#### Genes detected per cell (nFeature_RNA_)
+#### Mitochondrial counts ratio
+#### Ribosomal counts ratio
 ```
 VlnPlot(data_merged, features = c("nFeature_RNA", "nCount_RNA"), ncol = 2)
 VlnPlot(data_merged, features = c("percent.MT","percent.RIBO"), ncol = 2)
@@ -145,12 +148,32 @@ FeatureScatter(data_merged, feature1 = "nCount_RNA", feature2 = "nFeature_RNA")
 
 ![alt text](https://github.com/aayudh454/Single-cell-RNA-seq/blob/main/before_filtering.png)
 
-
-
-
 #### After filtering
 
+##### Doublets
+Doublets pose a challenge in single-cell RNA sequencing experiments as they result from the unintended combination of two cells. These occurrences commonly happen during cell sorting or capture, particularly in droplet-based protocols that handle a large number of cells. The presence of doublets is undesirable when the goal is to accurately characterize populations at the single-cell level. It can lead to erroneous indications of intermediate populations or transient states that do not genuinely exist. Consequently, it is crucial to eliminate doublet libraries to ensure the integrity of the interpretation derived from the results.
+
+It is worth noting that many existing workflows rely on setting maximum thresholds for unique molecular identifiers (UMIs) or genes as an indicator of multiple cells. Although this approach may seem intuitive, it is not always reliable. Moreover, several tools used to detect doublets have a tendency to discard cells with intermediate or continuous phenotypes, which can be problematic when dealing with datasets containing cell types that exhibit more nuanced characteristics.
+
+Good cells will generally exhibit both higher number of genes per cell (nFeature_RNA) and higher numbers of UMIs (nCount_RNA) per cell. Cells that are poor quality are likely to have low nFeature_RNA and nCount_RNA. Also Mitochondrial read fractions are only high in particularly low count cells with few detected genes.
+
+Now that we have visualized the various metrics, we can decide on the thresholds to apply which will result in the removal of low quality cells. Often the recommendations mentioned earlier are a rough guideline, and the specific experiment needs to inform the exact thresholds chosen. We will use the following thresholds:
+
+**nFeature_RNA > 500
+nCount_RNA < 700
+percent.MT < 25
+percent.RIBO > 3**
+
+```
+data_filtered <- subset(data_merged, subset = nFeature_RNA > 500 & nCount_RNA < 200000 & percent.MT < 25 & percent.RIBO > 3)
+VlnPlot(data_filtered, features = c("nFeature_RNA", "nCount_RNA"), ncol = 2)
+VlnPlot(data_filtered, features = c("percent.MT","percent.RIBO"), ncol = 2)
+FeatureScatter(data_filtered, feature1 = "percent.RIBO", feature2 = "percent.MT")
+FeatureScatter(data_filtered, feature1 = "nCount_RNA", feature2 = "nFeature_RNA")
+```
+
 ![alt text](https://github.com/aayudh454/Single-cell-RNA-seq/blob/main/after_filtering.png)
+
 
 
 

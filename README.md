@@ -128,15 +128,12 @@ H1_AAACGAAGTAGGGTAC-1    Human-1      26196         4641 -0.043996838 -0.0805917
 H1_AAACGAAGTCATAGTC-1    Human-1      72725         7990 -0.055117973 -0.09913018    G1  14.349948   14.3045720
 H1_AAAGAACCATTAAAGG-1    Human-1      12734         4046 -0.027648932 -0.08673782    G1   3.683053    8.0021988
 ```
-
-
-
-
 -----
 <div id='id-section2'/>
 
 ## Chapter 2: Visualize the common QC metrics
 
+#### Before filering
 Now plot the common QC metrics.
 
 ```
@@ -145,3 +142,16 @@ VlnPlot(data_merged, features = c("percent.MT","percent.RIBO"), ncol = 2)
 FeatureScatter(data_merged, feature1 = "percent.RIBO", feature2 = "percent.MT")
 FeatureScatter(data_merged, feature1 = "nCount_RNA", feature2 = "nFeature_RNA")
 ```
+
+![alt text](https://github.com/aayudh454/Single-cell-RNA-seq/blob/main/before_filtering.png)
+
+
+
+
+#### After filtering
+
+![alt text](https://github.com/aayudh454/Single-cell-RNA-seq/blob/main/after_filtering.png)
+
+
+
+

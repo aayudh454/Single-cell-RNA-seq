@@ -273,6 +273,7 @@ ggsave(path = "Figs", filename = "Clusters.png",  height=5, width=6, units='in',
 ### Undesired variations 
 To begin the workflow, it is important to assess whether our data exhibits any undesired variations. In single-cell RNA-seq data, the most frequently examined biological effect is the **influence of the cell cycle on the transcriptome**. Additionally, there may be technical sources of variation, such as **batch effects**. This step of the workflow entails thoroughly examining the data to determine the specific covariates that should be accounted for and corrected.
 
+#### Explore the effects of cell cycle genes:
 ```
 head(data_clust@meta.data)
 
@@ -285,5 +286,14 @@ ggsave(path = "Figs", filename = "CellCycle_Phase.png",  height=5, width=7, unit
 
 ![alt text](https://github.com/aayudh454/Single-cell-RNA-seq/blob/main/CellCycle_Phase.png)
 
+#### Now, explore technical sources of variation such as the Batch Effect:
+# Set identity classes to seurat_clusters
+Idents(object = data_clust) <- "seurat_clusters"
 
+# Explore the significance of back effect on clustering
+DimPlot(data_clust, split.by = "orig.ident", label = TRUE, ncol = 2)+ NoLegend()
 
+# Save the plot
+ggsave(path = "Figs", filename = "Batch_effect.png",  height=6, width=8, units='in', dpi = 300, bg = "transparent", device='png')
+
+![alt text](https://github.com/aayudh454/Single-cell-RNA-seq/blob/main/Batch_effect.png)

@@ -269,3 +269,21 @@ DimPlot(data_clust, reduction = "umap", label = TRUE) + NoLegend()
 ggsave(path = "Figs", filename = "Clusters.png",  height=5, width=6, units='in', dpi = 300, bg = "transparent", device='png')
 ```
 ![alt text](https://github.com/aayudh454/Single-cell-RNA-seq/blob/main/Clusters.png)
+
+### Undesired variations 
+To begin the workflow, it is important to assess whether our data exhibits any undesired variations. In single-cell RNA-seq data, the most frequently examined biological effect is the **influence of the cell cycle on the transcriptome**. Additionally, there may be technical sources of variation, such as **batch effects**. This step of the workflow entails thoroughly examining the data to determine the specific covariates that should be accounted for and corrected.
+
+```
+head(data_clust@meta.data)
+
+# Evaluating effects of cell cycle (Phase)
+DimPlot(data_clust, group.by = "Phase", label = FALSE)
+
+# Save the plot
+ggsave(path = "Figs", filename = "CellCycle_Phase.png",  height=5, width=7, units='in', dpi = 300, bg = "transparent", device='png')
+```
+
+![alt text](https://github.com/aayudh454/Single-cell-RNA-seq/blob/main/CellCycle_Phase.png)
+
+
+

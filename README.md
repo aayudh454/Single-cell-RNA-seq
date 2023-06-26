@@ -9,7 +9,9 @@ REF: https://github.com/SomenMistri/intro_to_scRNA-seq/tree/main
 
 * [Page 3: 2023-30-06](#id-section3). Chapter 3: Data normalization and PCA
 
-* [Page 4: 2023-30-06](#id-section3). Chapter 4: Clustering
+* [Page 4: 2023-30-06](#id-section4). Chapter 4: Clustering
+  
+* [Page 5: 2023-30-06](#id-section5). Chapter 5: Integration
 
 ------
 <div id='id-section1'/>
@@ -298,3 +300,91 @@ DimPlot(data_clust, split.by = "orig.ident", label = TRUE, ncol = 2)+ NoLegend()
 ggsave(path = "Figs", filename = "Batch_effect.png",  height=6, width=8, units='in', dpi = 300, bg = "transparent", device='png')
 ```
 ![alt text](https://github.com/aayudh454/Single-cell-RNA-seq/blob/main/Batch_effect.png)
+
+
+-----
+<div id='id-section5'/>
+
+## Chapter 5: Integration
+
+To begin, the filtered Seurat object will be split into individual human samples, and subsequently, SCtransform will be applied to each sample separately. During this step, it is possible to remove various sources of variation, such as cell cycle features, percent.MT, and percent.RIBO. In this specific dataset, cell cycle regression may not be necessary, but for practice purposes, we will still perform the regression.
+
+After the SCtransform normalization, data integration will be carried out using a series of Seurat functions in the following order: SelectIntegrationFeatures(), PrepSCTIntegration(), FindIntegrationAnchors(), and IntegrateData().
+
+````
+saveRDS(data_clust, file= "data_clust_no_integration.rds") 
+
+#Let's split the object based on orig.ident
+Idents(data.filtered) <- "orig.ident"
+data.list <- SplitObject(data.filtered, split.by = "ident")
+
+# perform SCTransform normalization with cell cycle regression
+data.list <- lapply(X = data.list, FUN = function(x) {
+  x <- SCTransform(x, vars.to.regress = c("S.Score","G2M.Score"), verbose = FALSE)
+})
+
+# select integration features and prep step
+features <- SelectIntegrationFeatures(data.list)
+data.list <- PrepSCTIntegration(
+  data.list,
+  anchor.features = features
+)
+
+# downstream integration steps
+anchors <- FindIntegrationAnchors(
+  data.list,
+  normalization.method = "SCT",
+  anchor.features = features
+)
+data.integrated <- IntegrateData(anchors, normalization.method = "SCT")
+
+#Save the integrated file
+saveRDS(data.integrated, "data.integrated.rds")
+```
+
+#### Cluster the cells of integrated dataset
+To perform PCA and identify significant PCs in the integrated data
+
+```
+data_PCA2<- RunPCA(data.integrated, npcs = 40, verbose = FALSE)
+
+# Explore heatmap of PCs
+DimHeatmap(data_PCA2, 
+           dims = 1:10, 
+           cells = 500, 
+           balanced = TRUE)
+
+# Plot the elbow plot
+ElbowPlot(object = data_PCA2, 
+          ndims = 40)
+```
+
+to perform RunUMAP(), FindNeighbors(), FindClusters() functions one after another on the integrated dataset:
+
+```
+# Runs the Uniform Manifold Approximation and Projection (UMAP) dimensional reduction technique
+data_clust2 <- RunUMAP(data_PCA2, reduction = "pca", dims = 1:30)
+# Determine the K-nearest neighbor graph
+data_clust2 <- FindNeighbors(object = data_clust2, 
+                                dims = 1:30)
+# Perform graph based clustering
+data_clust2 <- FindClusters(object = data_clust2,
+                               resolution = 0.6)
+
+# Visualize clustered cells
+DimPlot(data_clust2, reduction = "umap", label = TRUE) + NoLegend()
+
+# Save the clustered plot
+ggsave(path = "Figs", filename = "Clusters_integrated.png",  height=5, width=6, units='in', dpi = 300, bg = "transparent", device='png')
+```
+
+```
+# Set identity classes to seurat_clusters
+Idents(object = data_clust2) <- "seurat_clusters"
+
+# Explore the significance of back effect on clustering
+DimPlot(data_clust2, split.by = "orig.ident", label = TRUE, ncol = 2)+ NoLegend()
+
+# Save the plot
+ggsave(path = "Figs", filename = "Batch_effect_integrated.png",  height=6, width=8, units='in', dpi = 300, bg = "transparent", device='png')
+```

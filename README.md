@@ -213,6 +213,11 @@ data_SCT <- SCTransform(data.filtered, verbose = TRUE)
 
 ### Clustering by Principal Component Analysis (PCA)
 
+In order to handle the technical noise in the gene expression data obtained from scRNA-seq, Seurat uses PCA scores derived from the expression of the most variable genes to assign cells to clusters. Each principal component (PC) represents a combination of genes that are correlated, acting as a "metagene." Determining the appropriate number of PCs to include in the clustering process is crucial to ensure that we capture most of the variation and cell types present in the dataset.
+
+Before deciding which PCs to include for clustering, it is beneficial to explore them. One approach is to create a heatmap that visualizes the most variant genes for selected PCs, arranging the genes and cells based on their PCA scores. The purpose is to examine the PCs and assess whether the genes driving them make sense for distinguishing different cell types.
+
+Another useful method for determining the number of PCs to use in clustering is the elbow plot. This plot illustrates the standard deviation of each PC, and we look for the point where the standard deviations start to level off. Typically, the elbow indicates the threshold for capturing the majority of the variation. However, it's important to note that this approach can be subjective.
 
 ```
 data_PCA<- RunPCA(data_SCT, npcs = 40, verbose = FALSE)

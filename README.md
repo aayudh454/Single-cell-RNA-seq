@@ -60,10 +60,9 @@ data_seurat4 <- CreateSeuratObject(counts = data4, project = "Human-4", min.cell
 
 ### Cell Cycle Scoring
 
-In some cases, there is a need for mitigating the effects of cell cycle heterogeneity in scRNA-seq data.This can be done by calculating cell cycle phase scores based on known cell cycle markers , and regressing these out of the data during pre-processing.
+In certain scenarios, it is necessary to address the impact of cell cycle heterogeneity in scRNA-seq data. One approach to mitigate this effect involves calculating cell cycle phase scores using known cell cycle markers and removing their influence during the pre-processing stage.
 
-Here we first Log Normalizing individual seurat objects using the NormalizeData() function. Then, we are using the CellCycleScoring() function to assign each cell a cell cycle score, based on its expression of G2/M and S phase markers. Seurat stores the s.genes and g2m.genes in the "cc.genes.updated.2019" list.
-
+To accomplish this, the following steps are performed. First, individual Seurat objects are log normalized using the NormalizeData() function. Subsequently, the CellCycleScoring() function is utilized to assign each cell a cell cycle score based on its expression of markers associated with the G2/M and S phases. Seurat stores the S-phase genes and G2/M-phase genes in the "cc.genes.updated.2019" list.
 
 ```
 #segregate the "cc.genes.updated.2019" list into markers of G2/M phase and markers of S phase
@@ -88,11 +87,7 @@ head(data_norm1[[]])
 **nFeature_RNA** is the **number of genes detected in each cell**. Low nFeature_RNA for a cell indicates that it may be dead/dying or an empty droplet.
 **nCount_RNA** is the **total number of molecules detected within a cell**. High nCount_RNA and/or nFeature_RNA indicates that the "cell" may in fact be a doublet (or multiplet). 
 
-
-
 ![alt text](https://github.com/aayudh454/Single-cell-RNA-seq/blob/main/nCount_RNA_nFeature_RNA.png)
-
-
 
 ### Merge individual seurat objects into one
 Merge all four seurat objects into one. The merge() function merges the raw count matrices of two or more Seurat objects creating a new Seurat object with a combined raw count matrix. Then, let's take a look at the metadata of the merged seurat object using the View() function.
@@ -109,8 +104,11 @@ table(data_merged$orig.ident)
 ```
 
 ### Calculate additional quality control metrics
+To determine the **mitochondrial and ribosomal transcript percentage per cell**, Seurat provides a convenient function called PercentageFeatureSet(). This function allows us to search for specific patterns within the dataset. In this case, we can utilize it to identify mitochondrial and ribosomal genes.
 
-Calculate the **mitochondrial and ribosomal transcript percentage per cell**. Seurat has a function that enables us to do this. The PercentageFeatureSet() function can take a specific pattern and search through the dataset for that pattern. We can search for mitochondrial genes by looking for the pattern "MT-". Similarly, for the ribosomal genes, we can look for the pattern "^RP[SL]". Usually, cells with high proportions of mitochondrial genes are considered as poor-quality cells. On the other hand, percentage of ribosomal transcript per cell varies greatly from cell type to cell type. Therefore, caution should be taken to use percent.RIBO values to filter out low quality cells.
+To calculate the mitochondrial transcript percentage, we can use the pattern "MT-" to search for genes associated with mitochondria. Cells with a high proportion of mitochondrial genes are typically considered low quality.
+
+For ribosomal transcript percentages, we can search for genes using the pattern "^RP[SL]". It's important to note that the percentage of ribosomal transcript varies significantly across different cell types. Therefore, caution should be exercised when using percent.RIBO values to filter out low-quality cells, as they can exhibit substantial variation depending on the cell type.
 
 ```
 # The [[ operator can add columns to object metadata. This is a great place to stash QC stats

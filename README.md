@@ -104,11 +104,7 @@ table(data_merged$orig.ident)
 ```
 
 ### Calculate additional quality control metrics
-To determine the **mitochondrial and ribosomal transcript percentage per cell**, Seurat provides a convenient function called PercentageFeatureSet(). This function allows us to search for specific patterns within the dataset. In this case, we can utilize it to identify mitochondrial and ribosomal genes.
-
-To calculate the mitochondrial transcript percentage, we can use the pattern "MT-" to search for genes associated with mitochondria. Cells with a high proportion of mitochondrial genes are typically considered low quality.
-
-For ribosomal transcript percentages, we can search for genes using the pattern "^RP[SL]". It's important to note that the percentage of ribosomal transcript varies significantly across different cell types. Therefore, caution should be exercised when using percent.RIBO values to filter out low-quality cells, as they can exhibit substantial variation depending on the cell type.
+To determine the **mitochondrial and ribosomal transcript percentage per cell**, Seurat provides a convenient function called PercentageFeatureSet(). This function allows us to search for specific patterns within the dataset. In this case, we can utilize it to identify mitochondrial and ribosomal genes. To calculate the mitochondrial transcript percentage, we can use the pattern "MT-" to search for genes associated with mitochondria. Cells with a high proportion of mitochondrial genes are typically considered low quality. For ribosomal transcript percentages, we can search for genes using the pattern "^RP[SL]". It's important to note that the percentage of ribosomal transcript varies significantly across different cell types. Therefore, caution should be exercised when using percent.RIBO values to filter out low-quality cells, as they can exhibit substantial variation depending on the cell type.
 
 ```
 # The [[ operator can add columns to object metadata. This is a great place to stash QC stats

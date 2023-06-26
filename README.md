@@ -378,6 +378,8 @@ DimPlot(data_clust2, reduction = "umap", label = TRUE) + NoLegend()
 ggsave(path = "Figs", filename = "Clusters_integrated.png",  height=5, width=6, units='in', dpi = 300, bg = "transparent", device='png')
 ```
 
+![alt text](https://github.com/aayudh454/Single-cell-RNA-seq/blob/main/Clusters_integrated.png)
+
 ```
 # Set identity classes to seurat_clusters
 Idents(object = data_clust2) <- "seurat_clusters"

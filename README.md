@@ -311,7 +311,7 @@ To begin, the filtered Seurat object will be split into individual human samples
 
 After the SCtransform normalization, data integration will be carried out using a series of Seurat functions in the following order: SelectIntegrationFeatures(), PrepSCTIntegration(), FindIntegrationAnchors(), and IntegrateData().
 
-````
+```
 saveRDS(data_clust, file= "data_clust_no_integration.rds") 
 
 #Let's split the object based on orig.ident

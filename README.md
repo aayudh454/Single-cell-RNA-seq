@@ -228,6 +228,6 @@ ElbowPlot(object = data_PCA,
           ndims = 40)
 ```
 
-![alt text](https://github.com/aayudh454/Single-cell-RNA-seq/blob/main/before_filtering.png)
+![alt text](https://github.com/aayudh454/Single-cell-RNA-seq/blob/main/joined_pca_plots.png)
 
 

@@ -13,7 +13,7 @@ REF: https://github.com/SomenMistri/intro_to_scRNA-seq/tree/main
   
 * [Page 5: 2023-30-06](#id-section5). Chapter 5: Integration
 
-* [Page 6: 2023-30-06](#id-section6). Chapter 6: Integration
+* [Page 6: 2023-30-06](#id-section6). Chapter 6: Visualization and Interpretation
 
 ------
 <div id='id-section1'/>
@@ -392,3 +392,63 @@ DimPlot(data_clust2, split.by = "orig.ident", label = TRUE, ncol = 2)+ NoLegend(
 # Save the plot
 ggsave(path = "Figs", filename = "Batch_effect_integrated.png",  height=6, width=8, units='in', dpi = 300, bg = "transparent", device='png')
 ```
+
+-----
+<div id='id-section6'/>
+
+## Chapter 6: Visualization and Interpretation
+
+#### Load the integrated clustered seurat object (data_clust_integrated.rds)
+
+```
+library(XVector)
+library(Seurat)
+library(tidyverse)
+library(Matrix)
+library(RCurl)
+library(scales)
+library(sctransform)
+
+setwd("/Users/azd6024/Library/CloudStorage/OneDrive-ThePennsylvaniaStateUniversity/scRNA/PDAC_tissue/1_Human_PDAC_tissue/3_Data_visualization")
+
+data_clust_integrated <- readRDS ("data_clust_integrated.rds")
+
+# Visualize the clustered (integrated) cells
+DimPlot(data_clust_integrated, reduction = "umap", label = TRUE) + NoLegend()
+
+# Save the plot
+ggsave(path = "Figs", filename = "Clusters_integrated.png",  height=5, width=6, units='in', dpi = 300, bg = "transparent", device='png')
+```
+#### Find markers for each cluster
+
+```
+DefaultAssay(data_clust_integrated)  <- "RNA"
+Idents(data_clust_integrated) <- "seurat_clusters"
+data_markers <- FindAllMarkers(data_clust_integrated, only.pos = TRUE, min.pct = 0.25, logfc.threshold = 0.25)
+data_markers %>%
+  group_by(cluster) %>%
+  slice_max(n = 5, order_by = p_val)
+```
+![alt text](https://github.com/aayudh454/Single-cell-RNA-seq/blob/main/marker_list.png)
+
+#### Dot plot
+The gene list was selected based on the Figure S1B of our paper of interest (Du et al., 2022).
+```
+DefaultAssay(data_clust_integrated)  <- "RNA"
+# Select features (genes) to look at:
+FEATURES <- c("MS4A1","CD79A","IGJ","LYZ","APOE","ITGAM","ITGAX","GZMB","HLA-DRA","CD14","CD3D",
+              "NKG7","NCAM1","CD3E","ACTA2","CDH11","PDGFRB","PDPN","THY1","COL1A1","COL3A1",
+              "IRF7","PLVAP","VWF","CDH5","TPSAB1","CPA3","LUM","DCN","PRSS1","CTRB2","REG1A",
+              "SPP1","MMP7","CLU","MKI67","KRT8","SPINK1","KRT19","KRT18","TFF1","IL22","IL22RA2",
+              "CD207","CD1A","CD101","ITGAE","CCL22","LAMP3","IRF8",
+              "CD4","CD8A")
+              
+
+# Dot plots - the size of the dot corresponds to the percentage of cells expressing the
+# feature in each cluster. The color represents the average expression level
+DotPlot(data_clust_integrated, features = FEATURES)+RotatedAxis()
+
+# Save the dot plot
+ggsave(path = "Figs", filename = "Human_PDAC_clustered_gene_dotplot.png",  height=8, width=14, units='in', dpi = 300, bg = "transparent", device='png')
+```
+![alt text](https://github.com/aayudh454/Single-cell-RNA-seq/blob/main/Human_PDAC_clustered_gene_dotplot.png)

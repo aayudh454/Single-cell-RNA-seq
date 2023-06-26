@@ -7,6 +7,8 @@ REF: https://github.com/SomenMistri/intro_to_scRNA-seq/tree/main
 
 * [Page 2: 2023-30-06](#id-section2). Chapter 2: Visualize the common QC metrics
 
+* [Page 3: 2023-30-06](#id-section3). Chapter 3: Data integration and clustering
+
 ------
 <div id='id-section1'/>
 
@@ -170,6 +172,11 @@ FeatureScatter(data_filtered, feature1 = "nCount_RNA", feature2 = "nFeature_RNA"
 
 REF: Jihe Liu, William J. Gammerdinger, Meeta Mistry, Mary E. Piper, & Radhika S. Khetani. (2022, January 6). hbctraining/Intro-to-shell-flipped: Shell and HPC Lessons from HCBC (first release). Zenodo. https://doi.org/10.5281/zenodo.5826091
 
+
+-----
+<div id='id-section3'/>
+
+## Chapter 3: Data integration and clustering
 
 
 

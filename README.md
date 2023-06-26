@@ -7,7 +7,9 @@ REF: https://github.com/SomenMistri/intro_to_scRNA-seq/tree/main
 
 * [Page 2: 2023-30-06](#id-section2). Chapter 2: Visualize the common QC metrics
 
-* [Page 3: 2023-30-06](#id-section3). Chapter 3: Data integration and clustering
+* [Page 3: 2023-30-06](#id-section3). Chapter 3: Data integration
+
+* [Page 4: 2023-30-06](#id-section3). Chapter 4: Clustering
 
 ------
 <div id='id-section1'/>
@@ -181,7 +183,7 @@ saveRDS(data_filtered, file = "data_filtered.rds")
 -----
 <div id='id-section3'/>
 
-## Chapter 3: Data integration and clustering
+## Chapter 3: Data integration
 
 ### Normalization
 Normalization is an important initial step in analyzing mRNA expression data. It involves adjusting the expression counts of genes to account for systematic variations, making them comparable across different genes and samples. When working with single-cell RNA sequencing (scRNA-seq) data, specific normalization methods are employed.
@@ -236,3 +238,34 @@ ElbowPlot(object = data_PCA,
 ![alt text](https://github.com/aayudh454/Single-cell-RNA-seq/blob/main/joined_pca_plots.png)
 
 
+
+-----
+<div id='id-section4'/>
+
+## Chapter 4: Clustering
+
+Clusters of cells are formed by grouping cells together based on the **similarity of their gene expression profiles**. To determine expression profile similarity, distance metrics are used, often relying on dimensionality-reduced representations as input. Seurat assigns cells to clusters by considering their PCA scores derived from the expression of the most variable genes.
+
+Although PCA determines all principal components (PCs), we can only visualize two at a time. On the other hand, dimensionality reduction techniques like **Uniform Manifold Approximation and Projection (UMAP)** utilize **information from any number of top PCs to position cells in a multidimensional space**. UMAP calculates distances in this multidimensional space and then plots them in two dimensions, aiming to **preserve both local and global structure**. Thus, the distances between cells in the plot represent their similarity in gene expression.
+
+For cell clustering, Seurat employs a graph-based approach using a K-nearest neighbor method. It attempts to partition the graph into densely interconnected "quasi-cliques" or "communities." The initial step involves constructing a **K-nearest neighbor (KNN) graph** based on the Euclidean distance in PCA space. Seurat accomplishes this through the FindNeighbors() function. Subsequently, cells are grouped iteratively in order to optimize the standard modularity function. The FindClusters() function in Seurat handles the graph-based clustering. The "resolution" parameter plays a crucial role at this stage, as it determines the level of detail in the resulting clusters and needs to be optimized for each experiment. In general, for **datasets containing 3,000 to 5,000 cells, a resolution between 0.4 and 1.4 tends to yield good clustering**. Larger datasets often require higher resolution values to generate a greater number of clusters.
+
+Note: When running the RunUMAP(), FindNeighbors(), and FindClusters() functions sequentially (as shown in chunk 6), it is advisable to use the same number of PCA dimensions as input for both RunUMAP() and FindNeighbors().
+
+```
+# Runs the Uniform Manifold Approximation and Projection (UMAP) dimensional reduction technique
+data_clust <- RunUMAP(data_PCA, reduction = "pca", dims = 1:30)
+# Determine the K-nearest neighbor graph
+data_clust <- FindNeighbors(object = data_clust, 
+                                dims = 1:30)
+# Perform graph based clustering
+data_clust <- FindClusters(object = data_clust,
+                               resolution = 0.6)
+
+# Visualize clustered cells
+DimPlot(data_clust, reduction = "umap", label = TRUE) + NoLegend()
+
+# Save the clustered plot
+ggsave(path = "Figs", filename = "Clusters.png",  height=5, width=6, units='in', dpi = 300, bg = "transparent", device='png')
+```
+![alt text](https://github.com/aayudh454/Single-cell-RNA-seq/blob/main/Clusters.png)

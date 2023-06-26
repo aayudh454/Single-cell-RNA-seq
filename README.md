@@ -13,6 +13,8 @@ REF: https://github.com/SomenMistri/intro_to_scRNA-seq/tree/main
   
 * [Page 5: 2023-30-06](#id-section5). Chapter 5: Integration
 
+* [Page 6: 2023-30-06](#id-section6). Chapter 6: Integration
+
 ------
 <div id='id-section1'/>
 
@@ -46,7 +48,7 @@ library(sctransform)
 ```
 ### Load individual count matrices
 
-The Read10X() function reads in the output of the cellranger pipeline from 10X, returning a unique molecular identified (UMI) count matrix. The values in this matrix represent the number of molecules for each feature (i.e. gene; row) that are detected in each cell (column).
+The function Read10X() is used to import the results of the cellranger pipeline from 10X. It retrieves a count matrix that contains unique molecular identifiers (UMIs). Each value in the matrix indicates the number of molecules detected for a particular feature (such as a gene) in each cell, with rows representing features and columns representing cells.
 
 ```
 data1 <- Read10X("PDAC_tissue_1_filtered_feature_bc_matrix")

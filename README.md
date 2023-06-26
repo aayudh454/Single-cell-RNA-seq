@@ -157,10 +157,10 @@ Good cells will generally exhibit both higher number of genes per cell (nFeature
 
 Now that we have visualized the various metrics, we can decide on the thresholds to apply which will result in the removal of low quality cells. Often the recommendations mentioned earlier are a rough guideline, and the specific experiment needs to inform the exact thresholds chosen. We will use the following thresholds:
 
-**nFeature_RNA > 500
-nCount_RNA < 700
-percent.MT < 25
-percent.RIBO > 3**
+* nFeature_RNA > 500
+* nCount_RNA < 700
+* percent.MT < 25
+* percent.RIBO > 3
 
 ```
 data_filtered <- subset(data_merged, subset = nFeature_RNA > 500 & nCount_RNA < 200000 & percent.MT < 25 & percent.RIBO > 3)

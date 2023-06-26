@@ -287,6 +287,7 @@ ggsave(path = "Figs", filename = "CellCycle_Phase.png",  height=5, width=7, unit
 ![alt text](https://github.com/aayudh454/Single-cell-RNA-seq/blob/main/CellCycle_Phase.png)
 
 #### Now, explore technical sources of variation such as the Batch Effect:
+```
 # Set identity classes to seurat_clusters
 Idents(object = data_clust) <- "seurat_clusters"
 
@@ -295,5 +296,5 @@ DimPlot(data_clust, split.by = "orig.ident", label = TRUE, ncol = 2)+ NoLegend()
 
 # Save the plot
 ggsave(path = "Figs", filename = "Batch_effect.png",  height=6, width=8, units='in', dpi = 300, bg = "transparent", device='png')
-
+```
 ![alt text](https://github.com/aayudh454/Single-cell-RNA-seq/blob/main/Batch_effect.png)

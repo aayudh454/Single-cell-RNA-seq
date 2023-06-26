@@ -133,12 +133,12 @@ H1_AAAGAACCATTAAAGG-1    Human-1      12734         4046 -0.027648932 -0.0867378
 
 ## Chapter 2: Visualize the common QC metrics
 
-#### Before filering
+### Before filering
 Now plot the common QC metrics to see-
-#### UMI counts per cell (nCount_RNA)
-#### Genes detected per cell (nFeature_RNA_)
-#### Mitochondrial counts ratio
-#### Ribosomal counts ratio
+* #### UMI counts per cell (nCount_RNA)
+* #### Genes detected per cell (nFeature_RNA_)
+* #### Mitochondrial counts ratio
+* #### Ribosomal counts ratio
 ```
 VlnPlot(data_merged, features = c("nFeature_RNA", "nCount_RNA"), ncol = 2)
 VlnPlot(data_merged, features = c("percent.MT","percent.RIBO"), ncol = 2)

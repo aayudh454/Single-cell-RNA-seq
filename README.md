@@ -211,8 +211,23 @@ During this lesson, our main approach for data normalization will be to utilize 
 data_SCT <- SCTransform(data.filtered, verbose = TRUE)
 ```
 
+### Clustering by Principal Component Analysis (PCA)
 
 
+```
+data_PCA<- RunPCA(data_SCT, npcs = 40, verbose = FALSE)
 
+# Explore heatmap of PCs
+DimHeatmap(data_PCA, 
+           dims = 1:10, 
+           cells = 500, 
+           balanced = TRUE)
+
+# Let's draw the elbow plot using the top 40 PCs
+ElbowPlot(object = data_PCA, 
+          ndims = 40)
+```
+
+![alt text](https://github.com/aayudh454/Single-cell-RNA-seq/blob/main/before_filtering.png)
 
 

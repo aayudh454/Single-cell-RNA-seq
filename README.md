@@ -7,7 +7,7 @@ REF: https://github.com/SomenMistri/intro_to_scRNA-seq/tree/main
 
 * [Page 2: 2023-30-06](#id-section2). Chapter 2: Visualize the common QC metrics
 
-* [Page 3: 2023-30-06](#id-section3). Chapter 3: Data integration
+* [Page 3: 2023-30-06](#id-section3). Chapter 3: Data normalization and PCA
 
 * [Page 4: 2023-30-06](#id-section3). Chapter 4: Clustering
 
@@ -183,7 +183,7 @@ saveRDS(data_filtered, file = "data_filtered.rds")
 -----
 <div id='id-section3'/>
 
-## Chapter 3: Data integration
+## Chapter 3: Data normalization and PCA
 
 ### Normalization
 Normalization is an important initial step in analyzing mRNA expression data. It involves adjusting the expression counts of genes to account for systematic variations, making them comparable across different genes and samples. When working with single-cell RNA sequencing (scRNA-seq) data, specific normalization methods are employed.

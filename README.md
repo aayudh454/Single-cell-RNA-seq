@@ -172,11 +172,46 @@ FeatureScatter(data_filtered, feature1 = "nCount_RNA", feature2 = "nFeature_RNA"
 
 REF: Jihe Liu, William J. Gammerdinger, Meeta Mistry, Mary E. Piper, & Radhika S. Khetani. (2022, January 6). hbctraining/Intro-to-shell-flipped: Shell and HPC Lessons from HCBC (first release). Zenodo. https://doi.org/10.5281/zenodo.5826091
 
+#### Save as .rds
+
+```
+saveRDS(data_filtered, file = "data_filtered.rds")
+```
 
 -----
 <div id='id-section3'/>
 
 ## Chapter 3: Data integration and clustering
+
+### Normalization
+Normalization is an important initial step in analyzing mRNA expression data. It involves adjusting the expression counts of genes to account for systematic variations, making them comparable across different genes and samples. When working with single-cell RNA sequencing (scRNA-seq) data, specific normalization methods are employed.
+
+### Methods
+Some scRNA-seq normalization methods resemble those used in bulk RNA-seq analysis, where global scale factors are applied to account for a common count-depth relationship across genes. However, these simple methods can lead to over-correction for low and moderately expressed genes and under-normalization for highly expressed genes if the assumptions underlying them are not valid. More complex normalization methods take into consideration the characteristics of each individual gene and apply corrections accordingly.
+
+Simple transformations involve applying the same mathematical function to each measurement. Common examples include **log transforms (used in the original Seurat workflow) or square root transforms (less frequently used)**. However, a study by Hafemeister and Satija in 2019 highlighted issues with simple transformations. They found that the standard log normalization approach affects genes with different abundances in varying ways, and effective normalization using log transforms is only observed with low to medium abundance genes. Additionally, significant imbalances in variance were observed when working with log-normalized data, indicating that all genes cannot be treated equally during normalization.
+
+#### Pearson residuals for transformation
+The suggested solution to address the issues with simple transformations is the utilization of **Pearson residuals for transformation**, which is implemented in Seurat's SCTransform function. This approach involves the following steps:
+
+* Multiplication by gene-specific weights: The measurements of each gene are multiplied by a weight that is specific to that gene.
+
+* Weighting based on non-uniform expression: Each gene is assigned a weight based on the amount of evidence indicating that it is expressed non-uniformly across cells. Genes that exhibit expression in only a small fraction of cells are given higher weights. This is particularly useful for identifying rare cell populations.
+
+* Consideration of both expression level and distribution: The approach not only takes into account the expression level of genes but also considers the distribution of their expression across cells.
+
+By incorporating these steps, the Pearson residuals transformation provides a more nuanced and effective normalization method for scRNA-seq data, addressing the limitations observed with simple transformations.
+
+```
+data.filtered <- readRDS ("data_filtered.rds")
+```
+During this lesson, our main approach for data normalization will be to utilize the **"SCTransform"** function within Seurat. It's important to note that this single command, SCTransform(), replaces the previous steps of NormalizeData(), ScaleData(), and FindVariableFeatures() in the original Seurat workflow, which involved log-normalization. By using SCTransform(), we can perform normalization in a more efficient and streamlined manner.
+
+```
+data_SCT <- SCTransform(data.filtered, verbose = TRUE)
+```
+
+
 
 
 
